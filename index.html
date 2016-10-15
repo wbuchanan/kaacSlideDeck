@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Intro to Item Response Theory using Open Source Solutions</title>
+
+		<meta name="description" content="Using jsonio, libd3, and libhtml to create reusable D3js">
+		<meta name="author" content="William R. Buchanan">
+		<meta name="institution" content="Fayette County Public Schools">
+		<meta name="title" content="Director of Data, Research, and Accountability">
+		<meta name="location" content="701 East Main Street, Lexington, KY 40502">
+		<meta name="contact" content="Billy.Buchanan@fayette.kyschools.us">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+		<script>
+			imgselect = function() {
+				var imgsel = d3.select("select#imgselector").property("value");
+				d3.select("img#image").attr("src", imgsel);
+			};
+		</script>
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Intro to Item Response Theory using Open Source Solutions</h2>
+					<p>
+						<small><a href="https://github.com/wbuchanan">Billy Buchanan, Ph.D.</a> </br>
+							<a href="http://www.fcps.net/administration/departments/data">Director of Data, Research, and Accountability</a></br>
+							<a href="http://www.fcps.net/administration/departments/data">Fayette County Public Schools</a></br>
+						</small>
+					</p>
+					<div style="font-size:48px; font-weight:bold"><a href="https://wbuchanan.github.io/kaacSlideDeck">https://wbuchanan.github.io/kaacSlideDeck</a></div>
+				</section>
+
+				<section>
+					<div>
+						<ul>
+							<li>What is Item Response Theory?</li>
+							<li>What is jMetrik?</li>
+							<li>Why You Need to Care</li>
+							<li>How do you do it?</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<h2>What is Item Response Theory?</h2>
+					<section>
+						<br><br>
+						<h3>And now for a bit of math...</h3>
+						<div>
+							<p>$$Pr(Y_{ij} = 1 | a, b_i, c_i, \theta_j) = c_i + (1 - c_i)\frac{exp^{(\alpha(\theta_j-\beta_i) ) }}{1 + exp^{(\alpha(\theta_j-\beta_i) ) }}$$</p>
+							<ul>
+								<li>$\alpha$ is the "discrimination" parameter</li>
+								<li>$\beta$ is the "difficulty" parameter</li>
+								<li>$c$ is the "pseudoguessing" parameter</li>
+								<li>$\theta$ is the "ability" parameter</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>$\alpha$ quantifies how well the item does at identifying low vs high ability</li>
+								<li>$\beta$ quantifies the amount of ability needed to have a 50% chance of responding correctly purely by chance</li>
+								<li>$c$ quantifies the minimum probability of a correct response</li>
+								<li>$\theta$ quantifies skill/ability...this gets transformed into a "scaled score"</li>
+								<li>If we constrain $\alpha$ to 1 and $c$ to 0 we would be fitting a Rasch model to the data</li>
+								<li>If we constrain $\alpha$ to be equal across items and $c$ to 0 we would be fitting a 1 Parameter Logistic (1PL) model to the data</li>
+								<li>If we constrain $c$ to 0 we would be fitting a 2 Parameter Logistic Model (2PL) to the data</li>
+								<li>If we freely estimate all of the parameters we would be fitting a 3 Parameter Logistic Model (3PL) to the data</li>							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<ul>
+								<li>Do to time contraints, we'll only talk about one of the ways to estimate 1PL models.</li>
+								<li>However, for those interested, if you view the slides and click your down arrow, there are some brief explanations of other IRT models that are appropriate for other contexts.</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h3>Partial Credit Models (PCM)</h3>
+						<div>
+							<p>
+								$$Pr(Y_{ij} = k | \theta_j) = \frac{exp^{ (\Sigma_{t=1}^k\alpha(\theta_j-\beta_{it}) ) }}{1 + \Sigma_{s = 1}^K exp^{ (\Sigma_{s=1}^s\alpha(\theta_j-\beta_{it}) ) } }  $$
+							</p>
+							<ul>
+								<li>The $\alpha$, $\beta$, & $\theta$ parameters have the same meeting as the had from the other models.</li>
+								<li>The difference is that here we are predicting the probability of the respondent selecting the $k^{th}$ option from the response set if they have an ability of $\theta_j$</li>
+								<li>$\theta$ is also assumed to be $N(0, 1)$</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h3>Rating Scale Models (RSM)</h3>
+						<div>
+							<p>
+								$$Pr(Y_{ij} = k | \alpha, \beta_i, \theta_j) = \frac{exp^{ (\Sigma_{t=1}^k\alpha(\theta_j-\beta_{it}) ) }}{1 + \Sigma_{s = 1}^K exp^{ (\Sigma_{s=1}^s\alpha(\theta_j-\beta_{it}) ) } }  $$
+							</p>
+							<ul>
+								<li>There are some subtle but important differences between the Rating Scale and Partial Credit Models</li>
+								<li>The distance between the category difficulties are also constrained to be equal (e.g., the difference between scoring a 3 or 4 is the same as the difference in scoring a 2 or 3)</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h3>Graded Response Models (GRM)</h3>
+						<div>
+							<p>
+								$$Pr(Y_{ij} \geq k | \theta_j) = \frac{exp^{ (\Sigma_{t=1}^k\alpha_i(\theta_j-\beta_{ik}) ) }}{1 + \Sigma_{s = 1}^K exp^{ (\Sigma_{s=1}^s\alpha_i(\theta_j-\beta_{ik}) ) } }  $$
+							</p>
+							<ul>
+								<li>Here the interpretation of the $\beta$ parameter changes to indicate the difficulty of endorsing category $k$ or higher for the $i^{th}$ item</li>
+								<li>Additionally, unlike the PCM, the item discriminations (i.e., the $\alpha$) parameters are freely estimated</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h3>Nominal Response Models (NRM)</h3>
+						<div>
+							<p>
+								$$Pr(Y_{ij} = k | \theta_j) = \frac{exp^{ (\alpha_{ik}(\theta_j-\beta_{ik}) ) }}{\Sigma_{h = 1}^K exp^{ (\alpha_{ih}(\theta_j-\beta_{ih}) ) } }  $$
+							</p>
+							<ul>
+								<li>You can think of this as the categorical analog to the GRM.</li>
+								<li>These models would be used in cases where the response choice has no inherent value that could be ordered (e.g., what is your favorite ice cream flavor?)</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<h2>What is jMetrik?</h2>
+					<section>
+						<br>
+						<br>
+						<h2><a href="http://itemanalysis.com/jmetrik-download.php">Get jMetrik Here</a></h2>
+						<div>
+							<ul>
+								<li>Java-based application for Psychometric analysis of data</li>
+								<li>Freely available (e.g., does not cost you anything to use it and you can even modify it if you so desire)</li>
+								<li>Some functionality has been integrated into other software platforms like Stata (the <a href="https://wbuchanan.github.io/StatajMetrik/raschjmle/">raschjmle</a> program)</li>
+								<li>The source code for all of the <a href="https://github.com/meyerjp3/psychometrics">math</a> and <a href="https://github.com/meyerjp3/jmetrik">user interface</a> is publicly available: </li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<h2>Why You Need to Care</h2>
+					<section>
+						<br><br>
+						<h2>HR Issues</h2>
+						<div>
+							<ul>
+								<li><a href="http://caselaw.findlaw.com/us-supreme-court/401/424.html">Griggs v Duke Power Co (1971)</a> restricts the use of assessments for hiring to only those which are "demonstrably a reasonable measure of job performance".</li>
+								<li><a href="http://caselaw.findlaw.com/us-supreme-court/487/977.html">Watson v Fort Worth Bank & Trust (1988)</a> sets a clear need to have statistical evidence for use of assessment in hiring/firing decisions</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>Griggs v Duke Power</li>
+								<ul>
+									<li>Nothing in the Act precludes the use of testing or measuring procedures; obviously they are useful. What Congress has forbidden is giving these devices and mechanisms controlling force unless they are demonstrably a reasonable measure of job performance</li>
+									<li>What Congress has commanded is that any tests used must measure the person for the job and not the person in the abstract.</li>
+								</ul>
+								<li>Watson v Fort Worth</li>
+								<ul>
+									<li>Since neither the District Court nor the Court of Appeals has evaluated the statistical evidence to determine whether petitioner made out a prima facie case of discrimination under disparate impact theory, the case must be remanded.</li>
+								</ul>
+								<li></li>
+								<li></li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h2>The Real Reason</h2>
+						<div>
+							<ul>
+								<li>Bad Measurement = Bad Decisions = Bad Outcomes</li>
+								<li>We should enable the adults working with children to make the best decisions based on the best possible data</li>
+								<li>Bad Measurement + Correct Decision = Bad Decisions = Bad Outcomes</li>
+							</ul>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>You wouldn't try to claim how good a song was if you could only barely hear the song through all the static, so why are we ok making similar claims and statements about children and the adults teaching them?</li>
+								<li>If anyone is telling educators to change their day to day practices based on measures with unknown properties...STOP!!!!!</li>
+								<li>If you don't know the measurement you have is not good, you may make the correct/best decision based on what you take to be highly reliable error free data.  But, even in those cases the best decision based on noisy data is still generally the wrong decision, and will lead to the wrong outcome.</li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<h2>How do you do it?</h2>
+					<section>
+						<div>
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</section>
+					<section>
+						<div>
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</section>
+					<section>
+						<div>
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+					</section>
+				</section>
+
+				<section data-autoslide="1750">
+					<p>Oh...and by the way...</p>
+				</section>
+				<section>
+				<br>
+					<a href="http://www.fcps.net/administration/departments/human-resources/apply?category=Technology+-+Salaried"><h2>I'm Hiring Data Strategists</h2></a>
+					<h3>If you or someone you know is a data ninja, code wizard, or other type of quant, tell them to email <a href="mailto:Billy.Buchanan@fayette.kyschools.us?subject=Data%20Strategist%20Job%20Question%20From%20Scott%20Trimble%20Assessment%20Conference%20Presentation">me</a></h3>
+					<aside class="notes">
+						<ul>
+							<li></li>
+							<li></li>
+							<li></li>
+						</ul>
+					</aside>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: false,
+				history: true,
+				center: true,
+                overview: true,
+                touch: true,
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+                transitionSpeed: 'slow',
+                backgroundTransition: 'fade',
+
+				math: {
+					mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+        <script src="js/test.js"></script>
+	</body>
+</html>
