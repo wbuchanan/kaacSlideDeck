@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="28bed055-e7e0-4168-99a1-205def60c9cc" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/badScatter.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/myriadColorPalettes.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/onePaletteToRuleTheRest1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/onePaletteToRuleThemAll1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/onePaletteToRuleThemAll2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/sexWaterfallBrewscheme.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/uglyScatter.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/waterfallBrewScheme.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/media/waterfallDefault.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <ignored path="kaacSlideDeck.iws" />
@@ -39,8 +29,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
-              <caret line="780" column="58" selection-start-line="780" selection-start-column="58" selection-end-line="780" selection-end-column="58" />
+            <state relative-caret-position="306">
+              <caret line="794" column="151" selection-start-line="794" selection-start-column="151" selection-end-line="794" selection-end-column="151" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#section#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#section#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
@@ -124,20 +114,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kaacSlideDeck" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kaacSlideDeck" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="media" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -163,12 +139,12 @@
       <option name="presentableId" value="Default" />
       <updated>1476461891458</updated>
       <workItem from="1476461892797" duration="13573000" />
-      <workItem from="1476650922248" duration="5360000" />
+      <workItem from="1476650922248" duration="5527000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18933000" />
+    <option name="totallyTimeSpent" value="19100000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="23" y="70" width="1793" height="980" extended-state="0" />
@@ -221,6 +197,11 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/media/jMetrik-Start.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -229,15 +210,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/media/jMetrik-Start.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="780" column="58" selection-start-line="780" selection-start-column="58" selection-end-line="780" selection-end-column="58" />
+        <state relative-caret-position="306">
+          <caret line="794" column="151" selection-start-line="794" selection-start-column="151" selection-end-line="794" selection-end-column="151" />
           <folding>
             <element signature="n#style#0;n#div#0;n#section#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#section#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
