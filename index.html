@@ -83,11 +83,12 @@
 						<br><br>
 						<h3>And now for a bit of math...</h3>
 						<div>
-							<p>$$Pr(Y_{ij} = 1 | a, b_i, c_i, \theta_j) = c_i + (1 - c_i)\frac{exp^{(\alpha(\theta_j-\beta_i) ) }}{1 + exp^{(\alpha(\theta_j-\beta_i) ) }}$$</p>
+							<p>$$Pr(Y_{ij} = 1 | a_i, b_i, c_i, d_i, \theta_j) = c_i + (d_i - c_i)\frac{exp^{(\alpha(\theta_j-\beta_i) ) }}{1 + exp^{(\alpha(\theta_j-\beta_i) ) }}$$</p>
 							<ul>
 								<li>$\alpha$ is the "discrimination" parameter</li>
 								<li>$\beta$ is the "difficulty" parameter</li>
 								<li>$c$ is the "pseudoguessing" parameter</li>
+								<li>$d$ is the upper asymptote or highest probability of a correct response</li>
 								<li>$\theta$ is the "ability" parameter</li>
 							</ul>
 						</div>
@@ -97,10 +98,13 @@
 								<li>$\beta$ quantifies the amount of ability needed to have a 50% chance of responding correctly purely by chance</li>
 								<li>$c$ quantifies the minimum probability of a correct response</li>
 								<li>$\theta$ quantifies skill/ability...this gets transformed into a "scaled score"</li>
-								<li>If we constrain $\alpha$ to 1 and $c$ to 0 we would be fitting a Rasch model to the data</li>
-								<li>If we constrain $\alpha$ to be equal across items and $c$ to 0 we would be fitting a 1 Parameter Logistic (1PL) model to the data</li>
-								<li>If we constrain $c$ to 0 we would be fitting a 2 Parameter Logistic Model (2PL) to the data</li>
-								<li>If we freely estimate all of the parameters we would be fitting a 3 Parameter Logistic Model (3PL) to the data</li>							</ul>
+								<li>If we constrain $\alpha$ to 1, $c$ to 0, and $d$ to 1 we would be fitting a Rasch model to the data</li>
+								<li>If we constrain $\alpha$ to be equal across items, $c$ to 0, and $d$ to 1 we would be fitting a 1 Parameter Logistic (1PL) model to the data</li>
+								<li>If we constrain $c$ to 0 and $d$ to 1 we would be fitting a 2 Parameter Logistic Model (2PL) to the data</li>
+								<li>If we constrain $d$ to 1 and freely estimate all other parameters we would be fitting a 3 Parameter Logistic Model (3PL) to the data</li>
+								<li>If we freely estimate all parameters we would be fitting a 4 Parameter Logistic Model (4PL) to the data</li>
+							</ul>
+
 						</aside>
 					</section>
 					<section>
@@ -108,15 +112,13 @@
 						<div>
 							<ul>
 								<li>Do to time contraints, we'll only talk about one of the ways to estimate 1PL models.</li>
+								<li>More specifically, we'll be talking about fitting a Rasch model using the Joint Maximum Likelihood Estimator (JMLE) to the data.</li>
 								<li>However, for those interested, if you view the slides and click your down arrow, there are some brief explanations of other IRT models that are appropriate for other contexts.</li>
 							</ul>
 						</div>
 						<aside class="notes">
 							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-								<li></li>
+								<li>There is quite a bit that we'll skip over, but the information is in the slides</li>
 							</ul>
 						</aside>
 					</section>
@@ -128,17 +130,16 @@
 								$$Pr(Y_{ij} = k | \theta_j) = \frac{exp^{ (\Sigma_{t=1}^k\alpha(\theta_j-\beta_{it}) ) }}{1 + \Sigma_{s = 1}^K exp^{ (\Sigma_{s=1}^s\alpha(\theta_j-\beta_{it}) ) } }  $$
 							</p>
 							<ul>
-								<li>The $\alpha$, $\beta$, & $\theta$ parameters have the same meeting as the had from the other models.</li>
+								<li>The $\alpha$ & $\theta$ parameters have the same meeting as the had from the other models.</li>
+								<li>The $\beta$ parameter is the difficulty associated with the $t^{th}$ response option on the $i^{th}$ item</li>
 								<li>The difference is that here we are predicting the probability of the respondent selecting the $k^{th}$ option from the response set if they have an ability of $\theta_j$</li>
 								<li>$\theta$ is also assumed to be $N(0, 1)$</li>
 							</ul>
 						</div>
 						<aside class="notes">
 							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-								<li></li>
+								<li>The $N(0, 1)$ part just means that $\theta$ is normally distributed with a mean of 0 and standard deviation of 1</li>
+								<li>This model is used when you are using polytomous items, and reduces to the 1PL model if used with binary items</li>
 							</ul>
 						</aside>
 					</section>
@@ -156,10 +157,9 @@
 						</div>
 						<aside class="notes">
 							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-								<li></li>
+								<li>Ordinal data does not require there to be equal distance between the values.  Think of it like the order in which marathon runners finish.</li>
+								<li>There is no reason to believe that the difference between the 1st and 2nd place finisher is the same as the difference between the 99th and 100th finisher</li>
+								<li>This constraint is important to consider since it requires some fairly strong assumptions about the nature of the response scale and how respondents interpret it.</li>
 							</ul>
 						</aside>
 					</section>
@@ -177,10 +177,8 @@
 						</div>
 						<aside class="notes">
 							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-								<li></li>
+								<li>Here there is an additional constraint related to the way difficulty is estimated.</li>
+								<li>Unlike pairwise comparison of adjacent categories (e.g., 1 vs 2, 2 vs 3, etc...) this is a comparison of an higher values to a baseline (e.g., 1 vs 2, 3, or 4, 2 vs 3 or 4, 3 vs 4).</li>
 							</ul>
 						</aside>
 					</section>
@@ -198,10 +196,8 @@
 						</div>
 						<aside class="notes">
 							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-								<li></li>
+								<li>This is unlikely to be used in an assessment related to skill, mastery, or ability, but is valuable when creating surveys related to preference for different options.</li>
+								<li>For example, if you wanted to analyze a survey about which programs students would prefer to participate in, you would likely use this type of model.</li>
 							</ul>
 						</aside>
 					</section>
@@ -222,10 +218,10 @@
 						</div>
 						<aside class="notes">
 							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-								<li></li>
+								<li>There are other programs like IRTPRO, BILOG, MULTILOG, Xcaliber, WinSteps, Facets, etc... used by testing companies that vary in cost</li>
+								<li>This gets you comparable results (there will be some slight differences but shouldn't be anything that substantial) across the tools, but without the cost</li>
+								<li>jMetrik also includes functionality for doing IRT true score equating, linking, and other functionality related to developing multiple forms of a single measure</li>
+								<li>There are also several different scaling procedures available in the platform that help you to generate scaled scores that might be more palatteable and easier to explain than values of theta</li>
 							</ul>
 						</aside>
 					</section>
@@ -234,7 +230,7 @@
 					<h2>Why You Need to Care</h2>
 					<section>
 						<br><br>
-						<h2>HR Issues</h2>
+						<h3>HR Issues</h3>
 						<div>
 							<ul>
 								<li><a href="http://caselaw.findlaw.com/us-supreme-court/401/424.html">Griggs v Duke Power Co (1971)</a> restricts the use of assessments for hiring to only those which are "demonstrably a reasonable measure of job performance".</li>
@@ -252,19 +248,20 @@
 								<ul>
 									<li>Since neither the District Court nor the Court of Appeals has evaluated the statistical evidence to determine whether petitioner made out a prima facie case of discrimination under disparate impact theory, the case must be remanded.</li>
 								</ul>
-								<li></li>
-								<li></li>
+								<li>If you are using locally developed assessments as part of your evaluation system, you need to do your due dilligence to show that it is a sound measure for inferences about educator quality/effectiveness</li>
 							</ul>
 						</aside>
 					</section>
 					<section>
 						<br><br>
-						<h2>The Real Reason</h2>
+						<h3>The Real Reason</h3>
 						<div>
 							<ul>
 								<li>Bad Measurement = Bad Decisions = Bad Outcomes</li>
-								<li>We should enable the adults working with children to make the best decisions based on the best possible data</li>
+								<li>We should enable the adults working with children to make the best decisions based on the best possible data.</li>
 								<li>Bad Measurement + Correct Decision = Bad Decisions = Bad Outcomes</li>
+								<li>The quality of your measurement <strong style="color:#000000">is empirical, not opinion or feeling.</strong></li>
+								<li><strong style="color:#000000">Just because you think you are measuring something doesn't mean you are measuring it.</strong></li>
 							</ul>
 						</div>
 						<aside class="notes">
@@ -272,6 +269,7 @@
 								<li>You wouldn't try to claim how good a song was if you could only barely hear the song through all the static, so why are we ok making similar claims and statements about children and the adults teaching them?</li>
 								<li>If anyone is telling educators to change their day to day practices based on measures with unknown properties...STOP!!!!!</li>
 								<li>If you don't know the measurement you have is not good, you may make the correct/best decision based on what you take to be highly reliable error free data.  But, even in those cases the best decision based on noisy data is still generally the wrong decision, and will lead to the wrong outcome.</li>
+								<li>The better you know your measurement, the better you understand how to interpret the data derived from it.</li>
 							</ul>
 						</aside>
 					</section>
@@ -283,6 +281,12 @@
 						<div>
 							<img src="media/jMetrik-Start.png" alt="Initial view when starting the application" height="100%" width="100%">
 						</div>
+						<aside class="notes">
+							<ul>
+								<li>This is showing how the application looks when you first start it</li>
+								<li>The next few slides show you how to set up the database and load data from a .csv file into the application for analysis</li>
+							</ul>
+						</aside>
 					</section>
 					<section>
 						<br><br>
@@ -347,6 +351,16 @@
 						<div>
 							<img src="media/jMetrik-Scoring1.png" alt="Shows where to click to launch the advanced scoring dialog" height="100%" width="100%">
 						</div>
+						<aside class="notes">
+							<ul>
+								<li>There is one set of three slides for each of the response options, I'm only going to discuss the first, but you can see the others in the slide deck</li>
+								<li>Items that are not reached are typically not used when constructing the score for a student.  If we can't observe it, we have no way of knowing whether or not the student truly knew the answer</li>
+								<li>Scoring the item incorrectly will bias the score of the student downwards</li>
+								<li>Items with an omitted response are likely skipped either because the item is too difficult or the student may not know the answer and wants to move on to items they may have more success answering</li>
+								<li>Binary items are Correct/Incorrect</li>
+								<li>Polytomous items are those that would come from using a rubric or used in surveys</li>
+							</ul>
+						</aside>
 					</section>
 					<section>
 						<br><br>
@@ -447,6 +461,14 @@
 						<div>
 							<img src="media/jMetrik-ItemFrequencies1.png" alt="Shows menu option to click to launch item frequency dialog" height="100%" width="100%">
 						</div>
+						<aside class="notes">
+							<ul>
+								<li>These only show the number of times specific options were endorsed by respondents</li>
+								<li>This gives you an idea of how many times students selected each of the responses</li>
+								<li>In cases where there are ommitted and/or not reached responses, the valid percentage will exclude those from the denominator</li>
+								<li>Cumulative frequencies/percentages are based on all the observations up to and including that response option</li>
+							</ul>
+						</aside>
 					</section>
 					<section>
 						<br><br>
@@ -469,6 +491,15 @@
 						<div>
 							<img src="media/jMetrik-ItemAnalysis1.png" alt="Shows menu option to click for distractor analysis" height="100%" width="100%">
 						</div>
+						<aside class="notes">
+							<ul>
+								<li>Distractor analysis can give you a better understanding about the response set and what potential misconceptions persist among the studets</li>
+								<li>This is particularly valuable when building your item bank since it will give you information that you can use to select better distractors</li>
+								<li>The difficulties here represent the difficulty parameters if each of the options were the correct response.</li>
+								<li>If no one selected the response option, or if there are too few cases that selected that option, there will not be sufficient information to estimate the parameters and you will get the NaN value</li>
+								<li>If there are large overall discrimination values that are negative you may have a reversed item (e.g., a case where students with higher levels of mastery, skill, or ability are less likely to respond correctly compared to students with lower levels of mastery, skill, or ability).</li>
+							</ul>
+						</aside>
 					</section>
 					<section>
 						<br><br>
@@ -513,85 +544,96 @@
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch1.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch1.png" alt="Warning to click back on the item responses before moving forward" height="100%" width="100%">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>Rasch models constrain discrimination to be equal to a value of 1</li>
+								<li>Only the difficulty parameter is freely estimated</li>
+								<li>This can only be used with unidimensional measures (e.g., one subject/topic/content area)</li>
+								<li>When the item parameters are unknown a priori, use the Joint Maximum Likelihood Estimator (JMLE)</li>
+								<li>The JMLE allows you to calibrate the items and estimate the person parameters simultaneously</li>
+								<li>If you know the item parameter values a priori you can use the Marginal Maximum Likelihood (MML) Estimator for the item calibrations or person parameter estimates</li>
+								<li>When you don't have many observations, the Rasch models require the least amount of data to generate stable estimates of the parameters and may be less succeptable to parameter drift</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/jMetrik-Rasch2.png" alt="Shows where to click in the menu to launch the JMLE Dialog Box for Rasch Model" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch2.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch3.png" alt="Shows dialog box with default settings" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch3.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch4.png" alt="Shows how to select all items in bulk" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch4.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch5.png" alt="Verify that all items you want included in the analysis are located in the box on the right" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch5.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch6.png" alt="Shows some optional configuration settings on the global tab of the dialog box" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch6.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch7.png" alt="Shows the default view for the item tab" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch7.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch8.png" alt="Shows suggested options to use on the item tab" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch8.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch9.png" alt="Shows the default view for the person tab" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch9.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch10.png" alt="Shows suggested options to use on the person tab" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch10.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch11.png" alt="Shows where to click to fit the Rasch model to the data" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch11.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch12.png" alt="Shows annotated output from the start of the text based output that appears after fitting the model to the data" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch12.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch13.png" alt="Continuation of previous slide showing annotated text-based output after fitting the Rasch model to the data" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-Rasch13.png" alt="" height="100%" width="100%">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/jMetrik-Rasch14.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-Rasch14.png" alt="Shows annotations for the table where the results are stored related to the item parameter estimates" height="100%" width="100%">
 						</div>
 					</section>
 				</section>
@@ -601,151 +643,222 @@
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-ICC1.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-ICC1.png" alt="Annotated set up and menu location to generate Item/Test characteristic curves" height="100%" width="100%">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>After fitting your IRT model to the data, generate item/test characteristic curves and item/test information function graphs</li>
+								<li>These are amazingly dense visualizations that can be interpreted easily with a little training</li>
+								<li>With polytomous data, these look very different so we're again choosing to only focus on binary items</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/jMetrik-ICC2.png" alt="Annotation showing what it will look like when items are selected" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-ICC2.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-ICC3.png" alt="Shows suggested options to include when creating item characteristic curves" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-ICC3.png" alt="" height="100%" width="100%">
+							<img src="media/jMetrik-ICC4.png" alt="Shows buttons to click to select location where results will be saved and to execute the ICC graph generation" height="100%" width="100%">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jMetrik-ICC4.png" alt="" height="100%" width="100%">
+							<img src="media/item1.jpg" alt="Annotation explaining beta parameter location and meaning">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>The beta parameter is the difficulty parameter.</li>
+								<li>The value of the beta parameter can be found by drawing a line at the 0.5 probability of correct response mark on the y-axis to the ICC</li>
+								<li>Then drop the line straight down to the x-axis.</li>
+								<li>Students with this level of skill, mastery, or ability have a 50% chance of answering correctly purely by chance.</li>
+								<li>Students with more skill, mastery, or ability will have a greater probability of answering correctly</li>
+								<li>Students with less skill, mastery, or ability will have a lower probability of answering correctly</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/item2.jpg" alt="Annotation explaining item information function">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>The item information function shows the level of skill, mastery, or ability at which a correct response gives us the most information about the test taker</li>
+								<li>Items that are too easy or too difficult for the student give us little to no information about the student's underlying skill, mastery, or ability</li>
+								<li>But there is a sweet spot where we can learn a good amount about the students.</li>
+								<li>When constructing a test the importance of the information function cannot be understated and should align with the purpose of the assessment</li>
+								<li>You can measure the same concept with items of varying difficulty, so if you can match the difficulty of the items with the skill, mastery, or ability of the test takers you can glean more information from the results</li>
+								<li>When you create the test/form try to select items that provide a good amount of information across the range of theta that the test takers are assumed to have</li>
+								<li>For diagnostic assessments, you'll typically want to focus on the left tail of theta to get items that are more appropriate for struggling students</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/item3.jpg" alt="Warning about reversed ICC...with reversed items exclude them from the test form">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>Reversed items (e.g., those with negative values of the alpha parameter) should never be used in an assessment</li>
+								<li>These are items where the students with greater skill, mastery, or ability are less likely to answer correctly than students with lower levels of skill, mastery, or ability</li>
+								<li>You can get items like this if the wording causes students with different levels of ability, skill, or mastery to interpret the item stem inconsistently</li>
+								<li>These are usually the cases where you'll hear someone telling a student that they over thought the question</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/jmetrik-tcc-tif-tse.jpg" alt="Annotation explaining test characteristic curve, test information function, and the standard error of measurement.">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>The test characteristic curve/test information function is analogous to the ICC/IIF, but summarizes things for the test as a whole</li>
+								<li>This gives you an idea about how well all the items function collectively as a unified test/measure</li>
+								<li>The standard error of measurement should not be overlooked.</li>
+								<li>Remember that all of statistics is about uncertainty; In other words, nothing is certain in statistics other than estimates contain some degree of uncertainty</li>
+								<li>As you get into the tails of the ability distribution there will be more error/noise in the measurement</li>
+								<li>Aside from being how the math works, this is also due to the number of students that are usually in the tails of the distribution</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/item4.jpg" alt="Annotation explaining the pseudoguessing parameter">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>The pseudoguessing or c parameter defines the value of the lower asymptote</li>
+								<li>Although the 3PL is currently used in Kentucky assessments, many assessment professionals have moved away from these models due to their instability and the difficulty in the model converging on a unique solution.</li>
+								<li>Do not call this the guessing parameter.</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/item5.jpg" alt="Annotation explaining the d parameter">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>The USDA uses 4PL models in surveys about food insecurity because people are likely to feel shame if they endorse an option that suggests they are less able to provide food for their children.</li>
+								<li>These models are also used in cases where the test length is long enough to potentially affect the outcome of a student's response due to fatigue</li>
+								<li>These models are not typically used in many state assessments, but it is still good information to know and understand.</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/item6.jpg" alt="Annotation explaining discrimination parameter">
+						</div>
+						<class aside="notes">
+							<ul>
+								<li>The discrimination parameter does not mean human discrimination</li>
+								<li>You could think of it like how well Kentuckians can detect good from bad basketball players (e.g., discriminating taste in basketball players), particularly those who view basketball through blue and white lenses</li>
+								<li>This is basically about the range over which the item does a good job at identifying high and low skill, mastery, and ability</li>
+								<li>The slope should always be positive when using an item in a test form</li>
+								<li>For a Rasch model, this slope will always be equal to 1</li>
+								<li>For other types of 1PL models, the slope will be equal to the average item discrimination</li>
+								<li>In 2PL, 3PL, and 4PL models, the slope can and will vary by item</li>
+							</ul>
+						</class>
+					</section>
+					<section>
+						<br><br>
+						<div>
+							<img src="media/item7.jpg" alt="Item Characteristic Curve for example item number 7">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item1.jpg" alt="">
+							<img src="media/item8.jpg" alt="Item Characteristic Curve for example item number 8">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item2.jpg" alt="">
+							<img src="media/item9.jpg" alt="Item Characteristic Curve for example item number 9">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item3.jpg" alt="">
+							<img src="media/item10.jpg" alt="Item Characteristic Curve for example item number 10">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/jmetrik-tcc-tif-tse.jpg" alt="">
+							<img src="media/item11.jpg" alt="Item Characteristic Curve for example item number 11">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item4.jpg" alt="">
+							<img src="media/item12.jpg" alt="Item Characteristic Curve for example item number 12">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item5.jpg" alt="">
+							<img src="media/item13.jpg" alt="Item Characteristic Curve for example item number 13">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item6.jpg" alt="">
+							<img src="media/item14.jpg" alt="Item Characteristic Curve for example item number 14">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item7.jpg" alt="">
+							<img src="media/item15.jpg" alt="Item Characteristic Curve for example item number 15">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item8.jpg" alt="">
+							<img src="media/item16.jpg" alt="Item Characteristic Curve for example item number 16">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item9.jpg" alt="">
+							<img src="media/item17.jpg" alt="Item Characteristic Curve for example item number 17">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item10.jpg" alt="">
+							<img src="media/item18.jpg" alt="Item Characteristic Curve for example item number 18">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item11.jpg" alt="">
+							<img src="media/item19.jpg" alt="Item Characteristic Curve for example item number 19">
 						</div>
 					</section>
 					<section>
 						<br><br>
 						<div>
-							<img src="media/item12.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item13.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item14.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item15.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item16.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item17.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item18.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item19.jpg" alt="">
-						</div>
-					</section>
-					<section>
-						<br><br>
-						<div>
-							<img src="media/item20.jpg" alt="">
+							<img src="media/item20.jpg" alt="Item Characteristic Curve for example item number 20">
 						</div>
 					</section>
 				</section>
@@ -754,45 +867,71 @@
 					<h2>Differential Item Functioning</h2>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-FindDIFAnalysis.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-FindDIFAnalysis.png" alt="Shows Menu item where DIF analysis can be found" height="100%" width="100%">
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>Differential Item Functioning is a way to evaluate measurement invariance at the item level</li>
+								<li>If a reading passage tells a story about Rugby, we would expect students from New Zealand with the same ability as American students would have a greater probability of answering correctly.  This is what DIF is.</li>
+								<li>DIF does not mean bias.  Bias occurs when a group of students has a lower chance of answering correctly regardless of their ability.</li>
+								<li>DIF analysis is a way of flagging items for additional review.</li>
+								<li>There is also differential test functioning, but that is closer to traditional tests of measurement invariance from the structural equation modeling literature</li>
+								<li>What we want at the end of the day is for any differences in the latent means (e.g., theta, skill, ability, mastery, etc...) to be true differences and not be driven by differences in the probabilities of correct responses across groups with the same/similar levels of ability.</li>
+							</ul>
+						</aside>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFAnalysis.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFAnalysis.png" alt="Shows annotated set up for DIF analysis" height="100%" width="100%">
+						</div>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFSave.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFSave.png" alt="Shows dialog to name table where results will be saved" height="100%" width="100%">
+						</div>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFRun.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFRun.png" alt="Shows button to click to execute DIF analysis" height="100%" width="100%">
+						</div>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFTable.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFOutput1.png" alt="Explanation of class A DIF" height="100%" width="100%">
+						</div>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFOutput1.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFOutput2.png" alt="Explanation of class B and C of DIF" height="100%" width="100%">
+						</div>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFOutput2.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFOutput3.png" alt="Annotated DIF output with advice on handling items with higher levels of DIF" height="100%" width="100%">
+						</div>
 					</section>
 					<section>
 						<br><br>
-						<img src="media/jMetrik-DIFOutput3.png" alt="" height="100%" width="100%">
+						<div>
+							<img src="media/jMetrik-DIFTable.png" alt="Differential Item Function Results table annotated" height="100%" width="100%">
+						</div>
 					</section>
 				</section>
 
 				<section data-autoslide="1750">
 					<p>Oh...and by the way...</p>
 				</section>
-				<section>
+				<section style="background-color:#FFFFFF">
 				<br>
-					<a href="http://www.fcps.net/administration/departments/human-resources/apply?category=Technology+-+Salaried"><h2>I'm Hiring Data Strategists</h2></a>
-					<h3>If you or someone you know is a data ninja, code wizard, or other type of quant that wants to enjoy life out in Wildcat Country tell them to email <a href="mailto:Billy.Buchanan@fayette.kyschools.us?subject=Data%20Strategist%20Job%20Question%20From%20Scott%20Trimble%20Assessment%20Conference%20Presentation">me</a></h3>
+					<a href="http://www.fcps.net/administration/departments/human-resources/apply?category=Technology+-+Salaried"><h1 style="color:#0000FF">FCPS is Hiring Data Strategists</h1></a>
+					<h3 style="color:#000000">If you or someone you know is a data ninja, code wizard, or other type of quant that wants to enjoy life out in Wildcat Country tell them to <a href="mailto:Billy.Buchanan@fayette.kyschools.us?subject=Data%20Strategist%20Job%20Question%20From%20Scott%20Trimble%20Assessment%20Conference%20Presentation"><h3 style="color:#0000FF"> email me</h3></a></h3>
 					<aside class="notes">
 						<ul>
 							<li></li>
